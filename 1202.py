@@ -39,7 +39,7 @@ def is_safe(l, curr):
         elif prev >= j and j > k and is_valid(j, k):
             return is_safe(l[1:], j)
         else:
-            return Falsex
+            return False
 
 
 def count_safe_reports(lists):

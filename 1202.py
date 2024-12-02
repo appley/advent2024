@@ -19,13 +19,11 @@ def parse_file_to_intlists(f):
     return(d)
 
 
-def is_safe(l):
+def is_safe(l, curr):
     print("checking", l)
 
     def is_valid(a, b):
-        if a < b and b - a >= 1 and b - a <= 3:
-            return True
-        elif a > b and a - b >= 1 and a - b <= 3:
+        if abs(b - a) >= 1 and abs(b - a) <= 3:
             return True
         else:
             return False
@@ -33,22 +31,15 @@ def is_safe(l):
     if len(l) == 1:
         return True
     else:
+        prev = curr
         j = l[0]
         k = l[1]
-        if is_valid(j, k):
-            return is_safe(l[1:])
-        
-
-# def is_safe(l):
-
-#     for i in range(len(l)-1):
-#         print(l[i])
-#         if l[i] < l[i+1] and l[i+1] - l[i] >= 1 and l[i+1] - l[i] <= 3:
-#             return True
-#         elif l[i] > l[i+1] and l[i] - l[i+1] >= 1 and l[i] - l[i+1] <= 3:
-#             return True
-#         else:
-#             return False
+        if prev <= j and j < k and is_valid(j, k):
+            return is_safe(l[1:], j)
+        elif prev >= j and j > k and is_valid(j, k):
+            return is_safe(l[1:], j)
+        else:
+            return Falsex
 
 
 def count_safe_reports(lists):
@@ -56,22 +47,22 @@ def count_safe_reports(lists):
     total = 0
     
     for l in lists:
-        if is_safe(l):
+        if is_safe(l, l[0]):
             total += 1
 
     return total
 
 
-# with open(input, "r") as f:
-#     reports = parse_file_to_intlists(f)
-#     print(count_safe_reports(reports))
+with open(input, "r") as f:
+    reports = parse_file_to_intlists(f)
+    print(count_safe_reports(reports))
 
 
 # print(count_safe_reports(TEST))
 
-print(is_safe([7, 6, 4, 2, 1]))
-print(is_safe([1, 2, 7, 8, 9]))
-print(is_safe([9, 7, 6, 2, 1]))
-print(is_safe([1, 3, 2, 4, 5]))
-print(is_safe([8, 6, 4, 4, 1]))
-print(is_safe([1, 3, 6, 7, 9]))
+# print(is_safe([7, 6, 4, 2, 1], 7))
+# print(is_safe([1, 2, 7, 8, 9], 1))
+# print(is_safe([9, 7, 6, 2, 1], 9))
+# print(is_safe([1, 3, 2, 4, 5], 1))
+# print(is_safe([8, 6, 4, 4, 1], 8))
+# print(is_safe([1, 3, 6, 7, 9], 1))

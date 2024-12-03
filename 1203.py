@@ -11,7 +11,7 @@ PATTERN = "mul\((\d+),(\d+)\)"
 DO = "do()"
 DONT = "don't()"
 
-DO = "don't\(\).*do\(\)"
+DO = "don't\(\).*?do\(\)"
 
 
 def find_int_pairs(s):
@@ -46,6 +46,8 @@ def parse_file_and_produce_instructions(f):
     for line in f:
 
         int_pairs.extend(find_int_pairs(line))
+
+        print(int_pairs)
     
     return produce_mul_instructions(int_pairs)
 

@@ -7,6 +7,7 @@ TEST = [[7, 6, 4, 2, 1],
 [8, 6, 4, 4, 1],
 [1, 3, 6, 7, 9]]
 
+
 def parse_file_to_intlists(f):
 
     d = []
@@ -48,6 +49,7 @@ def remove_element(i, l):
 
 
 def is_safe_iter(l):
+
     if is_safe(l, l[0]):
         return True
     else:
@@ -64,11 +66,17 @@ def count_safe_reports(lists, func):
     
     for l in lists:
 
-        if func(l):
+        curr = l[0]
+
+        if func(*l):
             total += 1
 
     return total
 
+# part 1
+with open(input, "r") as f:
+    reports = parse_file_to_intlists(f)
+    print(count_safe_reports(reports, is_safe))
 
 # part 2
 with open(input, "r") as f:

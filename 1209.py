@@ -17,41 +17,41 @@ def to_string(f):
 def to_disk_map(input):
 
     def loop_string(item, num):
-        s = ""
+        l = []
         for i in range(num):
-            s += item
-        return s
+            l.append(item)
+        return l
 
-    s = ""
+    l = []
 
     t = 0
     for i, j in enumerate(input):
         
         int_j = int(j)
         if i%2 == 0:
-            k = loop_string(str(t), int_j)
+            k = loop_string(t, int_j)
             t += 1
         else:
             k = loop_string(".", int_j)
-        s += k
+        l += k
 
-    return s
+    return l
 
 
-def smoosh(s):
+def smoosh(l):
     def move_last(index, curr_s):
-        return curr_s[:index] + curr_s[-1] + curr_s[index+1:len(curr_s)-1]
+        return curr_s[:index] + [curr_s[-1]] + curr_s[index+1:len(curr_s)-1]
     
-    if "." not in s:
-        return s
+    if "." not in l:
+        return l
     
     else:
-        for i, j in enumerate(s):
+        for i, j in enumerate(l):
             print(i)
-            print("current string: ", s)
+            print("current string: ", l)
             if j == ".":
-                new_s = move_last(i, s)
-                print(i, s, new_s)
+                new_s = move_last(i, l)
+                print(i, l, new_s)
                 return smoosh(new_s)
             
 
@@ -71,7 +71,11 @@ with open(input, "r") as f:
 
     # print(to_disk_map(to_string(f)))
 
+    # print(check_sum(smoosh(to_disk_map(TEST))))
+
     print(check_sum(smoosh(to_disk_map(to_string(f)))))
+
+
     
 
 

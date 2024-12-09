@@ -29,7 +29,7 @@ def to_disk_map(input):
         
         int_j = int(j)
         if i%2 == 0:
-            k = loop_string(str(t), int_j) 
+            k = loop_string(str(t), int_j)
             t += 1
         else:
             k = loop_string(".", int_j)
@@ -69,9 +69,9 @@ def check_sum(s):
     
 with open(input, "r") as f:
 
-    print(to_disk_map(to_string(f)))
+    # print(to_disk_map(to_string(f)))
 
-    # print(check_sum(smoosh(to_disk_map(to_string(f)))))
+    print(check_sum(smoosh(to_disk_map(to_string(f)))))
     
 
 

@@ -2,6 +2,9 @@ input = "input/1209.txt"
 
 TEST = "2333133121414131402"
 
+
+# 00...111...2...333.44.5555.6666.777.888899
+
 d = {0: 0, 1: 0, 5: 1, 6: 1, 7: 1, 11: 2, 15: 3, 16: 3, 17: 3, 19: 4, 20: 4, 22: 5, 23: 5, 24: 5, 25: 5, 2: 9, 3: 9, 4: 8, 8: 8, 9: 8, 10: 8, 12: 7, 13: 7, 14: 7, 18: 6, 21: 6, 26: 6}
 
 
@@ -82,9 +85,10 @@ def to_compact_dict(t):
     d = t[0]
     
     for i in t[1]:
-        max_d = max(d)
-        d[i] = d[max_d]
-        d.pop(max_d)
+        if i < len(d):
+            max_d = max(d)
+            d[i] = d[max_d]
+            d.pop(max_d)
     
     return sorted(d.items())
     
@@ -94,26 +98,21 @@ def check_sum(d):
     total = 0
 
     for i in d:
-        total += i * d[i]
+        total += i[0] * i[1]
 
     return total
         
 
-# print(check_sum(to_compact_dict(to_lists(TEST))))
+print(check_sum(to_compact_dict(to_lists(TEST))))
 
     
 
-print(to_compact_dict(to_lists(TEST)))
+# print(to_compact_dict(to_lists(TEST)))
 
-# with open(input, "r") as f:
+with open(input, "r") as f:
 
+    print(check_sum(to_compact_dict(to_lists(to_string(f)))))
 
-
-    # print(to_disk_map(to_string(f)))
-
-    # print(check_sum(smoosh(to_disk_map(TEST))))
-
-    # print(check_sum(smoosh(to_disk_map(to_string(f)))))
 
 
     

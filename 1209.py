@@ -2,6 +2,8 @@ input = "input/1209.txt"
 
 TEST = "2333133121414131402"
 
+d = {0: 0, 1: 0, 5: 1, 6: 1, 7: 1, 11: 2, 15: 3, 16: 3, 17: 3, 19: 4, 20: 4, 22: 5, 23: 5, 24: 5, 25: 5, 2: 9, 3: 9, 4: 8, 8: 8, 9: 8, 10: 8, 12: 7, 13: 7, 14: 7, 18: 6, 21: 6, 26: 6}
+
 
 def to_string(f):
 
@@ -40,15 +42,15 @@ def to_disk_map(input):
 def to_lists(input):
 
     def to_index_pairs(num_times_loop, start_index, curr_num):
-        l = []
+        d = {}
         for i in range(num_times_loop):
-            l.append((start_index, curr_num))
+            d[start_index] = curr_num
             start_index +=1
 
         # print("returning", l)
-        return l
+        return d
 
-    nums = []
+    nums = {}
     spaces = []
     new_list_index = 0
     num_index = 0
@@ -60,8 +62,8 @@ def to_lists(input):
         num_times_loop = int(j)
 
         if i%2 == 0:
-            nums += to_index_pairs(num_times_loop, new_list_index, num_index)
-            print("nums", nums)
+            nums.update(to_index_pairs(num_times_loop, new_list_index, num_index))
+            # print("nums", nums)
             num_index += 1
 
         else:
@@ -75,66 +77,34 @@ def to_lists(input):
     return (nums, spaces)
 
 
-def to_compact(t):
+def to_compact_dict(t):
+
+    d = t[0]
     
-    l = []
-    count = 0
+    for i in t[1]:
+        max_d = max(d)
+        d[i] = d[max_d]
+        d.pop(max_d)
     
-    for i in t[0]:
-        
-
-        
-
+    return sorted(d.items())
     
 
-def smoosh(l):
-
-    print(len(l))
-    def move_last(index, curr_s):
-        return curr_s[:index] + [curr_s[-1]] + curr_s[index+1:len(curr_s)-1]
-    
-    # if "." not in l:
-    #     return l
-    
-    # else:
-        print(l)
-
-    new_l = l.copy()
-    for i, j in enumerate(l):
-        print(l)
-        print("pass: ", i, j, len(new_l))
-        if "." not in l:
-            return l
-        else:
-        
-        # print(i, l)
-        # print("current string: ", l)
-            if j == ".":
-                l[i] = l[-1]
-                l.pop()
-        
-
-            # new_s = move_last(i, l)
-            # print(i, l, new_s)
-
-    print(l)
-    return l
-                # return smoosh(l)
-
-            
-
-def check_sum(s):
+def check_sum(d):
 
     total = 0
 
-    for i, j in enumerate(s):
-        total += i * int(j)
+    for i in d:
+        total += i * d[i]
 
     return total
         
 
-print(to_lists(TEST))
+# print(check_sum(to_compact_dict(to_lists(TEST))))
+
     
+
+print(to_compact_dict(to_lists(TEST)))
+
 # with open(input, "r") as f:
 
 

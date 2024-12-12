@@ -21,17 +21,6 @@ def to_string(f):
     return s
 
 
-def get_last_index(l):
-
-    if len(l) % 2 == 0:
-        return 0
-    return 1
-
-
-def create_nums_list(input):
-    pass
-
-
 def available_space(num, space):
 
     if num > space:
@@ -40,52 +29,105 @@ def available_space(num, space):
         return True
     
 
-def check_space_and_insert(num, space):
+def check_for_space(num, num_id, spaces):
 
-    if available_space(num[1], space[1]):
-        pass
+    new_spaces = spaces.copy()
+    moved = False
+    
+    for i, j in enumerate(spaces[:num_id+1]):
+        if available_space(num, j):
+            new_space = new_spaces[i] - num
+            new_spaces.pop(i)
+            new_spaces.insert(i, new_space)
+            moved = True
+            return (moved, i, new_spaces)
+    return (moved, num_id, new_spaces)
 
 
 def to_lists_two(input):
 
+    original = []
     nums_list = []
     spaces_list = []
+
     for i, j in enumerate(input):
+
         if i%2 == 0:
             nums_list.append(int(j))
         else:
             spaces_list.append(int(j))
-    return (nums_list, spaces_list)
+        
+        original.append(int(j))
+
+    return (nums_list, spaces_list, original)
 
 
 def compact_by_index(input):
 
-    items = to_list_two(input)
+    def to_index_pairs(num_times_loop, start_index, curr_num):
+        d = {}
+        for i in range(num_times_loop):
+            d[start_index] = curr_num
+            start_index +=1
+
+        # print("returning", l)
+        return d
+    
+
+    def find_start(index, d):
+
+        add_count = 0
+
+        if not d.get(index):
+            return index
+        else:
+            while d.get(index + add_count):
+                add_count += 1
+        return index + add_count
+    
+    def process_nums(nums, input):
+        d = {}
+        for i, j in enumerate(nums):
+            d.update(to_index_pairs(j, sum(input[:int(i*2)]), i))
+        return d
+
+
+    items = to_lists_two(input)
     nums = items[0]
     spaces = items[1]
+    original =  items[2]
 
-    curr_last_num_index = len(nums) - 1
-    curr_lowest_space_index = 0
+    curr_last_num_id = len(nums) - 1
 
-    nums_index = 0
+    nums_dict = process_nums(nums, original)
+    moved_nums = {}
 
-    for i, j in enumerate(input):
-        int_j = int(j)
-        if i%2 == 0:
-            l.append((int_j, nums_index, False))
-            nums_index += 1
-        else:
-            while curr_last_index >= 0:
-                curr_last_val = nums[curr_last_index]
-                print("checking index: ", curr_last_index, "item: ", curr_last_val)
-                if curr_last_val <= int_j:
-                    l.append((curr_last_val, curr_last_index, True))
-                    curr_last_index -= 1
-                else:
-                    curr_last_index -= 1
-            # l.append((int_j, False))
+    # nums index is X2
+    # spaces index is X2 - 1
+
+    while curr_last_num_id >= 1:
+
+        num = nums[curr_last_num_id]
+
+        move = check_for_space(
+            num, curr_last_num_id, spaces)
+
+        # (moved, i, new_spaces)
+        if move[0] is True:
+            start_index = find_start(move[1]*2 - 1, moved_nums)
+            d = to_index_pairs(num, start_index, curr_last_num_id)
+            moved_nums.update(d)
+            spaces = move[2]
+            nums.pop(curr_last_num_id)
+            
+            curr_last_num_id -= 1
     
-    return l
+        else:
+            curr_last_num_id -= 1
+    
+    return(sorted(nums_dict.items()))
+
+    # return(sorted(nums_dict.items()), sorted(moved_nums.items()))
 
 
 def to_lists(input):
@@ -126,45 +168,6 @@ def to_lists(input):
     return (nums, spaces)
 
 
-def to_list_two(input):
-
-    def to_index_pairs(num_times_loop, start_index, curr_num):
-        d = {}
-        for i in range(num_times_loop):
-            d[start_index] = curr_num
-            start_index +=1
-
-        # print("returning", l)
-        return d
-
-    nums = {}
-    spaces = []
-    new_list_index = 0
-    num_index = 0
-
-    # (index, num)
-    #nums [(0, 0), (1, 0), (5, 1), (6, 1), (7, 1)]
-    for i, j in enumerate(input):
-
-        num_times_loop = int(j[0])
-
-        if i%2 == 0 or j[1] is True:
-            nums.update(to_index_pairs(num_times_loop, new_list_index, num_index))
-            # print("nums", nums)
-            num_index += 1
-
-        else:
-            curr_index = new_list_index
-            for k in range(num_times_loop):
-            #     spaces.append(curr_index)
-                curr_index += 1
-        
-        new_list_index += int(j[0])
-
-    return sorted(nums.items())
-
-
-
 def to_compact_dict(t):
 
     d = t[0]
@@ -202,7 +205,7 @@ def check_sum(d):
 # with open(input, "r") as f:
 
 # print(compact_by_index(TEST))
-print(to_list_two(PAIRS))
+print(compact_by_index(TEST))
 
 
 

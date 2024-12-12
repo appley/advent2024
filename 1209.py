@@ -26,20 +26,46 @@ def get_last_index(l):
     if len(l) % 2 == 0:
         return 0
     return 1
+
+
+def create_nums_list(input):
+    pass
+
+
+def available_space(num, space):
+
+    if num > space:
+        return False
+    else:
+        return True
     
 
-def compact_by_index(input):
+def check_space_and_insert(num, space):
 
-    # produce list of nums to insert in reverse
+    if available_space(num[1], space[1]):
+        pass
+
+
+def to_lists_two(input):
+
     nums_list = []
+    spaces_list = []
     for i, j in enumerate(input):
         if i%2 == 0:
             nums_list.append(int(j))
+        else:
+            spaces_list.append(int(j))
+    return (nums_list, spaces_list)
 
-    print("nums list", nums_list)
 
-    l = []
-    curr_last_index = len(nums_list) - 1
+def compact_by_index(input):
+
+    items = to_list_two(input)
+    nums = items[0]
+    spaces = items[1]
+
+    curr_last_num_index = len(nums) - 1
+    curr_lowest_space_index = 0
 
     nums_index = 0
 
@@ -50,7 +76,7 @@ def compact_by_index(input):
             nums_index += 1
         else:
             while curr_last_index >= 0:
-                curr_last_val = nums_list[curr_last_index]
+                curr_last_val = nums[curr_last_index]
                 print("checking index: ", curr_last_index, "item: ", curr_last_val)
                 if curr_last_val <= int_j:
                     l.append((curr_last_val, curr_last_index, True))

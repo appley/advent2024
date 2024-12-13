@@ -3,14 +3,6 @@ input = "input/1209.txt"
 TEST = "2333133121414131402"
 
 
-PAIRS = [(2, 0, False), (2, 9, True), (3, 7, True), (2, 4, True), (3, 3, True), (1, 2, True), (3, 1, True), (2, 0, True), (4, 5, False), (4, 6, False), (4, 8, False)]
-
-
-# 00...111...2...333.44.5555.6666.777.888899
-
-d = {0: 0, 1: 0, 5: 1, 6: 1, 7: 1, 11: 2, 15: 3, 16: 3, 17: 3, 19: 4, 20: 4, 22: 5, 23: 5, 24: 5, 25: 5, 2: 9, 3: 9, 4: 8, 8: 8, 9: 8, 10: 8, 12: 7, 13: 7, 14: 7, 18: 6, 21: 6, 26: 6}
-
-
 def to_string(f):
 
     s = ""
@@ -90,7 +82,6 @@ def compact_by_index(input):
             d.update(to_index_pairs(j, sum(input[:int(i*2)]), i))
         return d
 
-
     items = to_lists_two(input)
     nums = items[0]
     spaces = items[1]
@@ -101,9 +92,6 @@ def compact_by_index(input):
     nums_dict = process_nums(nums, original)
     moved_nums = {}
 
-    # nums index is X2
-    # spaces index is X2 - 1
-
     while curr_last_num_id >= 1:
 
         num = nums[curr_last_num_id]
@@ -112,7 +100,6 @@ def compact_by_index(input):
             num, curr_last_num_id, spaces)
 
         if move[0] is True:
-            print("space index ", move[1])
             start_index = find_start(sum(original[:int(move[1]*2 + 1)]), moved_nums)
 
             d = to_index_pairs(num, start_index, curr_last_num_id)
@@ -124,9 +111,7 @@ def compact_by_index(input):
     
         else:
             curr_last_num_id -= 1
-    
-    # return(sorted(nums_dict.items()))
-    # return sorted(moved_nums.items())
+
     return(nums_dict, moved_nums)
 
 
@@ -146,11 +131,6 @@ def check_and_remove_moved(dicts):
     return sorted(filtered_original.items())
 
 
-
-
-
-
-
 def to_lists(input):
 
     def to_index_pairs(num_times_loop, start_index, curr_num):
@@ -159,7 +139,6 @@ def to_lists(input):
             d[start_index] = curr_num
             start_index +=1
 
-        # print("returning", l)
         return d
 
     nums = {}
@@ -167,15 +146,12 @@ def to_lists(input):
     new_list_index = 0
     num_index = 0
 
-    # (index, num)
-    #nums [(0, 0), (1, 0), (5, 1), (6, 1), (7, 1)]
     for i, j in enumerate(input):
 
         num_times_loop = int(j)
 
         if i%2 == 0:
             nums.update(to_index_pairs(num_times_loop, new_list_index, num_index))
-            # print("nums", nums)
             num_index += 1
 
         else:

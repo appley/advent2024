@@ -41,7 +41,8 @@ def check_for_space(num, num_id, spaces):
             new_spaces.insert(i, new_space)
             moved = True
             return (moved, i, new_spaces)
-    return (moved, num_id, new_spaces)
+    
+    return (moved, i, new_spaces)
 
 
 def to_lists_two(input):
@@ -70,10 +71,8 @@ def compact_by_index(input):
             d[start_index] = curr_num
             start_index +=1
 
-        # print("returning", l)
         return d
     
-
     def find_start(index, d):
 
         add_count = 0
@@ -112,9 +111,10 @@ def compact_by_index(input):
         move = check_for_space(
             num, curr_last_num_id, spaces)
 
-        # (moved, i, new_spaces)
         if move[0] is True:
-            start_index = find_start(move[1]*2 - 1, moved_nums)
+            print("space index ", move[1])
+            start_index = find_start(sum(original[:int(move[1]*2 + 1)]), moved_nums)
+
             d = to_index_pairs(num, start_index, curr_last_num_id)
             moved_nums.update(d)
             spaces = move[2]
@@ -125,9 +125,30 @@ def compact_by_index(input):
         else:
             curr_last_num_id -= 1
     
-    return(sorted(nums_dict.items()))
+    # return(sorted(nums_dict.items()))
+    # return sorted(moved_nums.items())
+    return(nums_dict, moved_nums)
 
-    # return(sorted(nums_dict.items()), sorted(moved_nums.items()))
+
+def check_and_remove_moved(dicts):
+
+    values_to_remove = []
+
+    original = dicts[0]
+    moved = dicts[1]
+
+    for i in moved:
+        values_to_remove.append(moved.get(i))
+
+    filtered_original = {k: v for k, v in original.items() if v not in values_to_remove}
+    filtered_original.update(moved)
+
+    return sorted(filtered_original.items())
+
+
+
+
+
 
 
 def to_lists(input):
@@ -189,23 +210,18 @@ def check_sum(d):
         total += i[0] * i[1]
 
     return total
-        
-
-# print(check_sum(to_compact_dict(to_lists(TEST))))
-
-    
-
-# print(to_compact_dict(to_lists(TEST)))
-
-# with open(input, "r") as f:
-
-#     print(check_sum(to_compact_dict(to_lists(to_string(f)))))
 
 
-# with open(input, "r") as f:
 
-# print(compact_by_index(TEST))
-print(compact_by_index(TEST))
+# part 1
+with open(input, "r") as f:
+
+    print(check_sum(to_compact_dict(to_lists(to_string(f)))))
+
+# part 2
+with open(input, "r") as f:
+
+    print(check_sum(check_and_remove_moved(compact_by_index(to_string(f)))))
 
 
 
